@@ -14,5 +14,5 @@ export default async function MilestonesPage() {
 
   const milestones = (rows ?? []).map(dbMilestoneToMilestone)
 
-  return <MilestonesClient milestones={milestones} userId={user!.id} />
+  return <MilestonesClient milestones={milestones} />
 }

@@ -14,9 +14,10 @@ type Props = {
   milestone: Milestone
   onToggle: (id: string) => void
   onDelete: (id: string) => void
+  canDelete?: boolean
 }
 
-export default function MilestoneCard({ milestone, onToggle, onDelete }: Props) {
+export default function MilestoneCard({ milestone, onToggle, onDelete, canDelete = true }: Props) {
   const due = new Date(milestone.dueDate)
   const isOverdue = !milestone.completed && due < new Date()
 
@@ -80,13 +81,15 @@ export default function MilestoneCard({ milestone, onToggle, onDelete }: Props) 
           )}
         </p>
       </div>
-      <button
-        onClick={handleDelete}
-        className="text-zinc-300 dark:text-zinc-600 hover:text-red-500 dark:hover:text-red-400 transition-colors text-xs px-1"
-        aria-label={`Delete "${milestone.title}"`}
-      >
-        ✕
-      </button>
+      {canDelete && (
+        <button
+          onClick={handleDelete}
+          className="text-zinc-300 dark:text-zinc-600 hover:text-red-500 dark:hover:text-red-400 transition-colors text-xs px-1"
+          aria-label={`Delete "${milestone.title}"`}
+        >
+          ✕
+        </button>
+      )}
     </div>
   )
 }

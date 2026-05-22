@@ -3,10 +3,10 @@
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import MilestoneCard from '@/components/MilestoneCard'
-import { toggleMilestone, deleteMilestone } from '@/app/actions/milestones'
+import { toggleMilestone } from '@/app/actions/milestones'
 import type { Milestone } from '@/types'
 
-export default function MilestonesClient({ milestones, userId }: { milestones: Milestone[]; userId: string }) {
+export default function MilestonesClient({ milestones }: { milestones: Milestone[] }) {
   const router = useRouter()
   const [, startTransition] = useTransition()
 
@@ -20,18 +20,17 @@ export default function MilestonesClient({ milestones, userId }: { milestones: M
     })
   }
 
-  function handleDelete(id: string) {
-    startTransition(async () => {
-      await deleteMilestone(id, userId)
-      router.refresh()
-    })
+  if (milestones.length === 0) {
+    return (
+      <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-12">
+        No milestones assigned yet. Your advisor will set these up.
+      </p>
+    )
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Milestones</h1>
-      </div>
+      <h1 className="text-lg font-semibold">Milestones</h1>
 
       {incomplete.length > 0 && (
         <section>
@@ -40,7 +39,7 @@ export default function MilestonesClient({ milestones, userId }: { milestones: M
           </h2>
           <div className="space-y-2">
             {incomplete.map((m) => (
-              <MilestoneCard key={m.id} milestone={m} onToggle={handleToggle} onDelete={handleDelete} />
+              <MilestoneCard key={m.id} milestone={m} onToggle={handleToggle} onDelete={() => {}} canDelete={false} />
             ))}
           </div>
         </section>
@@ -53,16 +52,10 @@ export default function MilestonesClient({ milestones, userId }: { milestones: M
           </h2>
           <div className="space-y-2">
             {complete.map((m) => (
-              <MilestoneCard key={m.id} milestone={m} onToggle={handleToggle} onDelete={handleDelete} />
+              <MilestoneCard key={m.id} milestone={m} onToggle={handleToggle} onDelete={() => {}} canDelete={false} />
             ))}
           </div>
         </section>
-      )}
-
-      {milestones.length === 0 && (
-        <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-12">
-          No milestones yet. Add your first one above.
-        </p>
       )}
     </div>
   )
