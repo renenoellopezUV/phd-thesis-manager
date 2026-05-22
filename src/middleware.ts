@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { UserRole } from '@/types'
 
-const AUTH_ROUTES = new Set(['/login', '/signup', '/verify-email', '/auth/confirm'])
+const AUTH_ROUTES = new Set(['/login', '/verify-email', '/auth/confirm'])
 const ADVISOR_PREFIX = '/advisor'
 const ADMIN_PREFIX = '/admin'
 
@@ -44,8 +44,8 @@ export async function middleware(request: NextRequest) {
   }
 
   if (user) {
-    // Authenticated users visiting login/signup → send to app
-    if (pathname === '/login' || pathname === '/signup') {
+    // Authenticated users visiting login → send to app
+    if (pathname === '/login') {
       return NextResponse.redirect(new URL('/', request.url))
     }
 

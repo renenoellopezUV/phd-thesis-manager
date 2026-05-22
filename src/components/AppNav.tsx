@@ -7,6 +7,15 @@ import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { getUserRole, ROLE_LABELS } from '@/types'
 
+function linkClass(href: string, pathname: string) {
+  const active = pathname === href || pathname.startsWith(href + '/')
+  return `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+    active
+      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50'
+      : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+  }`
+}
+
 const links = [
   { href: '/', label: 'Dashboard' },
   { href: '/milestones', label: 'Milestones' },
@@ -36,28 +45,39 @@ export default function AppNav() {
     router.refresh()
   }
 
+  const role = user ? getUserRole(user) : null
+
   return (
     <nav className="flex items-center gap-1 px-6 py-3 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
       <span className="mr-4 font-semibold text-sm text-zinc-800 dark:text-zinc-100 shrink-0">
         PhD Thesis Manager
       </span>
 
-      {links.map(({ href, label }) => {
-        const active = pathname === href
-        return (
-          <Link
-            key={href}
-            href={href}
-            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              active
-                ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50'
-                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-            }`}
-          >
-            {label}
-          </Link>
-        )
-      })}
+      {links.map(({ href, label }) => (
+        <Link
+          key={href}
+          href={href}
+          className={linkClass(href, pathname)}
+        >
+          {label}
+        </Link>
+      ))}
+
+      {role === 'admin' && (
+        <Link href="/admin/programs" className={linkClass('/admin/programs', pathname)}>
+          Programs
+        </Link>
+      )}
+      {role === 'admin' && (
+        <Link href="/admin/users" className={linkClass('/admin/users', pathname)}>
+          Users
+        </Link>
+      )}
+      {role === 'advisor' && (
+        <Link href="/advisor/students" className={linkClass('/advisor/students', pathname)}>
+          Students
+        </Link>
+      )}
 
       <div className="ml-auto flex items-center gap-3">
         {user ? (

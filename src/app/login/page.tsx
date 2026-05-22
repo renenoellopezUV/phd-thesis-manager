@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -90,10 +89,7 @@ function LoginForm() {
       </button>
 
       <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
-        No account?{' '}
-        <Link href="/signup" className="font-medium text-zinc-800 dark:text-zinc-200 hover:underline">
-          Create account
-        </Link>
+        Contact your administrator to create an account.
       </p>
     </form>
   )
