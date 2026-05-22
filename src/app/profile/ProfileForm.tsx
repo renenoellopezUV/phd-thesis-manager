@@ -45,7 +45,6 @@ export default function ProfileForm({ profile }: { profile: DbProfile | null }) 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
       {field('Name', 'name', 'text', profile?.name ?? '')}
-      {field('Advisor Email', 'advisorEmail', 'email', profile?.advisor_email ?? '')}
       {field('Department', 'department', 'text', profile?.department ?? '')}
       {field('Program', 'program', 'text', profile?.program ?? '')}
       {field('Start Date', 'startDate', 'date', profile?.start_date ?? '')}

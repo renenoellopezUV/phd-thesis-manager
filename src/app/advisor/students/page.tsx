@@ -11,7 +11,7 @@ export default async function AdvisorStudentsPage() {
   const { data: students } = await supabase
     .from('profiles')
     .select('*')
-    .eq('advisor_email', user!.email!)
+    .eq('advisor_id', user!.id)
     .order('name')
 
   if (!students || students.length === 0) {

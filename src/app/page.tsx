@@ -81,7 +81,7 @@ export default async function DashboardPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 mt-3 text-sm">
             <div>
               <span className="text-zinc-400 dark:text-zinc-500">Advisor</span>
-              <p className="font-medium">{profileRow.advisor_email ?? '—'}</p>
+              <p className="font-medium">{profileRow.advisor_id ?? '—'}</p>
             </div>
             <div>
               <span className="text-zinc-400 dark:text-zinc-500">Department</span>

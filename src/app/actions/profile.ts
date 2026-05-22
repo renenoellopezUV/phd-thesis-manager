@@ -14,7 +14,6 @@ export async function updateProfile(formData: FormData): Promise<{ error?: strin
       id: user.id,
       email: user.email ?? '',
       name: (formData.get('name') as string | null)?.trim() ?? '',
-      advisor_email: (formData.get('advisorEmail') as string | null)?.trim() || null,
       department: (formData.get('department') as string | null)?.trim() || null,
       program: (formData.get('program') as string | null)?.trim() || null,
       start_date: (formData.get('startDate') as string | null) || null,
