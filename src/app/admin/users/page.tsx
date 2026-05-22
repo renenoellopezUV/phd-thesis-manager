@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { ROLE_LABELS, type UserRole } from '@/types'
 import RoleSelector from './RoleSelector'
+import InviteUserForm from './InviteUserForm'
 
 export default async function AdminUsersPage() {
   const admin = createAdminClient()
@@ -19,7 +20,10 @@ export default async function AdminUsersPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-lg font-semibold">Users ({users.length})</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-lg font-semibold">Users ({users.length})</h1>
+        <InviteUserForm />
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">
           <thead>
