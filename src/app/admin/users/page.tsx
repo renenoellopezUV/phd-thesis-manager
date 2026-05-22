@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { ROLE_LABELS, type UserRole } from '@/types'
 import RoleSelector from './RoleSelector'
 import InviteUserForm from './InviteUserForm'
+import AdvisorAssigner from './AdvisorAssigner'
 
 export default async function AdminUsersPage() {
   const admin = createAdminClient()
@@ -18,6 +19,16 @@ export default async function AdminUsersPage() {
 
   const users = data.users
 
+  const { data: profiles } = await admin
+    .from('profiles')
+    .select('id, advisor_id')
+
+  const profileMap = new Map((profiles ?? []).map((p: { id: string; advisor_id: string | null }) => [p.id, p]))
+
+  const advisors = users
+    .filter((u) => (u.app_metadata as { role?: string })?.role === 'advisor')
+    .map((u) => ({ id: u.id, email: u.email ?? '' }))
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -30,6 +41,7 @@ export default async function AdminUsersPage() {
             <tr className="border-b border-zinc-200 dark:border-zinc-800">
               <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Email</th>
               <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Role</th>
+              <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Advisor</th>
               <th className="text-left py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Verified</th>
             </tr>
           </thead>
@@ -43,6 +55,17 @@ export default async function AdminUsersPage() {
                   <td className="py-3 pr-4 font-medium">{u.email}</td>
                   <td className="py-3 pr-4">
                     <RoleSelector userId={u.id} currentRole={role} />
+                  </td>
+                  <td className="py-3 pr-4">
+                    {role === 'student' ? (
+                      <AdvisorAssigner
+                        studentId={u.id}
+                        currentAdvisorId={profileMap.get(u.id)?.advisor_id ?? null}
+                        advisors={advisors}
+                      />
+                    ) : (
+                      <span className="text-zinc-300 dark:text-zinc-600 text-xs">—</span>
+                    )}
                   </td>
                   <td className="py-3">
                     {verified ? (
