@@ -5,7 +5,9 @@ import { createAdminClient } from '@/lib/supabase/admin'
 export async function GET() {
   try {
     const admin = createAdminClient()
-    const { data, error } = await admin.auth.admin.listUsers({ perPage: 200 })
+    // perPage: 1000 is Supabase's hard maximum for listUsers.
+    // This single-tenant PhD app will never approach that scale.
+    const { data, error } = await admin.auth.admin.listUsers({ perPage: 1000 })
     if (error || !data) {
       // Fail open — treat as "admin exists" to avoid locking users out
       return NextResponse.json({ exists: true })

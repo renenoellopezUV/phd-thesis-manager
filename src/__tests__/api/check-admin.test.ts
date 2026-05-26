@@ -108,4 +108,28 @@ describe('GET /api/check-admin', () => {
 
     expect(body.exists).toBe(true)
   })
+
+  it('returns { exists: false } when 1000 non-admin users exist (cap boundary)', async () => {
+    // Documents the perPage: 1000 cap — this app will never exceed Supabase's
+    // hard maximum, so paginating further is not needed.
+    const nonAdminUsers = Array.from({ length: 1000 }, (_, i) => ({
+      id: `u${i}`,
+      app_metadata: { role: 'student' },
+    }))
+    mockCreateAdminClient.mockReturnValue({
+      auth: {
+        admin: {
+          listUsers: jest.fn().mockResolvedValue({
+            data: { users: nonAdminUsers },
+            error: null,
+          }),
+        },
+      },
+    })
+
+    const res = await GET()
+    const body = await res.json() as { exists: boolean }
+
+    expect(body.exists).toBe(false)
+  })
 })
