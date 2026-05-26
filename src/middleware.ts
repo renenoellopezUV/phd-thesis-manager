@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { UserRole } from '@/types'
 
-const AUTH_ROUTES = new Set(['/login', '/verify-email', '/auth/confirm'])
+const AUTH_ROUTES = new Set(['/login', '/verify-email', '/auth/confirm', '/api/setup-admin'])
 const ADVISOR_PREFIX = '/advisor'
 const ADMIN_PREFIX = '/admin'
 
