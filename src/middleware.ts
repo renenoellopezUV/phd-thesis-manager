@@ -1,24 +1,39 @@
 // src/middleware.ts
 import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { UserRole } from '@/types'
 
 const AUTH_ROUTES = new Set(['/login', '/verify-email', '/auth/confirm'])
-// These routes implement the setup check/creation — exclude them from the guard
-// to prevent the middleware's own fetch('/api/check-admin') from re-entering this block
-const SETUP_API_ROUTES = new Set(['/api/check-admin', '/api/setup-admin'])
 const ADVISOR_PREFIX = '/advisor'
 const ADMIN_PREFIX = '/admin'
+
+async function adminExists(): Promise<boolean> {
+  try {
+    const admin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    )
+    const { data, error } = await admin.auth.admin.listUsers({ perPage: 1000 })
+    if (error || !data) return true // fail open
+    return data.users.some(
+      (u) => (u.app_metadata as { role?: string } | undefined)?.role === 'admin'
+    )
+  } catch {
+    return true // fail open
+  }
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // ── Setup guard ───────────────────────────────────────────────────────────
   // When ADMIN_BOOTSTRAPPED=true, skip entirely — zero cost in production.
-  if (!process.env.ADMIN_BOOTSTRAPPED && !SETUP_API_ROUTES.has(pathname)) {
+  // Checks Supabase directly (no internal fetch) so it works reliably on Netlify Edge.
+  if (!process.env.ADMIN_BOOTSTRAPPED && !pathname.startsWith('/api/setup-admin')) {
     try {
-      const checkRes = await fetch(new URL('/api/check-admin', request.url))
-      const { exists } = await checkRes.json() as { exists: boolean }
+      const exists = await adminExists()
 
       if (!exists) {
         if (pathname === '/setup') {
@@ -29,9 +44,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/setup', request.url))
       }
     } catch {
-      // Fail open — network or Supabase error.
-      // If already on /setup, allow the page to load (form will error on submit).
-      // For all other routes, proceed with normal auth flow.
+      // Fail open — if already on /setup, allow it through
       if (pathname === '/setup') {
         return NextResponse.next({ request })
       }
