@@ -21,6 +21,7 @@ export default function SetupPage() {
   function validate(): boolean {
     const next: typeof errors = {}
     if (!email.trim()) next.email = 'Email is required'
+    else if (!email.includes('@')) next.email = 'Invalid email address'
     if (!password) next.password = 'Password is required'
     else if (password.length < 8) next.password = 'Password must be at least 8 characters'
     if (password !== confirm) next.confirm = 'Passwords do not match'
@@ -80,7 +81,7 @@ export default function SetupPage() {
               ADMIN_BOOTSTRAPPED=true
             </code>
             <p className="text-xs text-emerald-600 dark:text-emerald-500">
-              Without this, the app will call Supabase to check for admins on every page load.
+              ⚠️ Do this now — until the flag is set, the setup endpoint remains accessible to anyone who can reach this deployment.
             </p>
           </div>
           <Link

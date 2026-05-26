@@ -29,7 +29,12 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/setup', request.url))
       }
     } catch {
-      // Fail open — Supabase or network error; proceed with normal auth flow
+      // Fail open — network or Supabase error.
+      // If already on /setup, allow the page to load (form will error on submit).
+      // For all other routes, proceed with normal auth flow.
+      if (pathname === '/setup') {
+        return NextResponse.next({ request })
+      }
     }
   }
 

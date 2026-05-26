@@ -3,6 +3,11 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function POST(request: Request) {
+  // ⚠️  This endpoint is unauthenticated by design — it is only meant to be called
+  // once, on a fresh deployment with no admin. After creating the first admin,
+  // set ADMIN_BOOTSTRAPPED=true in your environment variables immediately to
+  // disable this endpoint. Until that env var is set, anyone who can reach this
+  // URL before the legitimate operator could create an admin account.
   let email: string
   let password: string
 
