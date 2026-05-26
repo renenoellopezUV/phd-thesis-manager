@@ -18,8 +18,16 @@ export async function inviteUser(
   role: UserRole,
 ): Promise<{ error?: string }> {
   const admin = createAdminClient()
+  // NEXT_PUBLIC_SITE_URL must be set per environment:
+  //   .env.local        → http://localhost:3000
+  //   Netlify env vars  → https://your-app.netlify.app
+  // This ensures confirmation emails link to the right host, not whatever
+  // Supabase's "Site URL" is configured to.
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL
+  const redirectTo = `${siteUrl}/auth/confirm`
   const { error } = await admin.auth.admin.inviteUserByEmail(email, {
     data: { role },
+    redirectTo,
   })
   if (error) return { error: error.message }
   revalidatePath('/admin/users')
