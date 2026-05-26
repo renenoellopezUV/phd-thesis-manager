@@ -36,33 +36,43 @@ export default function SetupPage() {
 
     setLoading(true)
 
-    const res = await fetch('/api/setup-admin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    })
+    try {
+      const res = await fetch('/api/setup-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
 
-    if (!res.ok) {
-      const body = await res.json() as { error?: string }
-      setServerError(body.error ?? 'Something went wrong')
+      if (!res.ok) {
+        let message = 'Something went wrong'
+        try {
+          const body = await res.json() as { error?: string }
+          message = body.error ?? `Server error (${res.status})`
+        } catch {
+          message = `Server error (${res.status})`
+        }
+        setServerError(message)
+        return
+      }
+
+      // Auto sign-in so the admin is authenticated before they reach /admin/users
+      const supabase = createClient()
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+
+      if (signInError) {
+        // Account created but sign-in failed — user can log in manually
+        setServerError(
+          'Account created, but automatic sign-in failed. Please log in manually on the login page.'
+        )
+        return
+      }
+
+      setDone(true)
+    } catch (err) {
+      setServerError(`Unexpected error: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
       setLoading(false)
-      return
     }
-
-    // Auto sign-in so the admin is authenticated before they reach /admin/users
-    const supabase = createClient()
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
-    setLoading(false)
-
-    if (signInError) {
-      // Account created but sign-in failed — user can log in manually
-      setServerError(
-        'Account created, but automatic sign-in failed. Please log in manually on the login page.'
-      )
-      return
-    }
-
-    setDone(true)
   }
 
   if (done) {
