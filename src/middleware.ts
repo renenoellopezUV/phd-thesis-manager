@@ -1,12 +1,45 @@
+// src/middleware.ts
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { UserRole } from '@/types'
 
 const AUTH_ROUTES = new Set(['/login', '/verify-email', '/auth/confirm'])
+// These routes implement the setup check/creation — exclude them from the guard
+// to prevent the middleware's own fetch('/api/check-admin') from re-entering this block
+const SETUP_API_ROUTES = new Set(['/api/check-admin', '/api/setup-admin'])
 const ADVISOR_PREFIX = '/advisor'
 const ADMIN_PREFIX = '/admin'
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // ── Setup guard ───────────────────────────────────────────────────────────
+  // When ADMIN_BOOTSTRAPPED=true, skip entirely — zero cost in production.
+  if (!process.env.ADMIN_BOOTSTRAPPED && !SETUP_API_ROUTES.has(pathname)) {
+    try {
+      const checkRes = await fetch(new URL('/api/check-admin', request.url))
+      const { exists } = await checkRes.json() as { exists: boolean }
+
+      if (!exists) {
+        if (pathname === '/setup') {
+          // No admin yet — allow /setup to load, skip all auth checks below
+          return NextResponse.next({ request })
+        }
+        // Any other route — redirect to setup
+        return NextResponse.redirect(new URL('/setup', request.url))
+      }
+    } catch {
+      // Fail open — Supabase or network error; proceed with normal auth flow
+    }
+  }
+
+  // /setup is only valid during bootstrap; redirect away once an admin exists
+  // (also handles the case where ADMIN_BOOTSTRAPPED is set and user visits /setup)
+  if (pathname === '/setup') {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
+  // ── End setup guard ───────────────────────────────────────────────────────
+
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -33,7 +66,6 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { pathname } = request.nextUrl
   const isAuthRoute = AUTH_ROUTES.has(pathname)
 
   // Unauthenticated: redirect to login (except auth routes)
