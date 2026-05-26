@@ -23,8 +23,18 @@ export async function POST(request: Request) {
   if (password.length < 8) {
     return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 })
   }
+  if (!email.includes('@')) {
+    return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
+  }
 
-  const admin = createAdminClient()
+  // Construct admin client — throws if env vars are missing
+  let admin
+  try {
+    admin = createAdminClient()
+  } catch (e) {
+    console.error('[setup-admin] failed to create admin client:', e)
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
+  }
 
   // Re-verify no admin exists — prevents race conditions and direct API abuse
   // perPage: 1000 is Supabase's hard maximum; this app will never approach that scale
@@ -48,7 +58,8 @@ export async function POST(request: Request) {
   })
 
   if (createError) {
-    return NextResponse.json({ error: createError.message }, { status: 500 })
+    console.error('[setup-admin] createUser failed:', createError.message)
+    return NextResponse.json({ error: 'Failed to create admin user' }, { status: 500 })
   }
 
   return NextResponse.json({ ok: true })

@@ -41,6 +41,13 @@ describe('POST /api/setup-admin', () => {
     expect(body.error).toMatch(/8 characters/i)
   })
 
+  it('returns 400 for a malformed email address', async () => {
+    const res = await POST(makeRequest({ email: 'notanemail', password: 'password123' }))
+    expect(res.status).toBe(400)
+    const body = await res.json() as { error: string }
+    expect(body.error).toMatch(/email/i)
+  })
+
   it('returns 400 for invalid JSON body', async () => {
     const req = new Request('http://localhost/api/setup-admin', {
       method: 'POST',
@@ -179,6 +186,6 @@ describe('POST /api/setup-admin', () => {
     const res = await POST(makeRequest({ email: 'admin@test.com', password: 'password123' }))
     expect(res.status).toBe(500)
     const body = await res.json() as { error: string }
-    expect(body.error).toBe('Email already registered')
+    expect(body.error).toBe('Failed to create admin user')
   })
 })
