@@ -3,7 +3,7 @@ export const SUPPORTED_LOCALES: readonly Locale[] = ['en', 'es']
 export const DEFAULT_LOCALE: Locale = 'en'
 
 export function isValidLocale(value: string | undefined | null): value is Locale {
-  return SUPPORTED_LOCALES.includes(value as Locale)
+  return (SUPPORTED_LOCALES as readonly string[]).includes(value ?? '')
 }
 
 export function parseAcceptLanguage(header: string | null | undefined): Locale {
