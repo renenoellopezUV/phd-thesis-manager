@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { getUserRole, ROLE_LABELS } from '@/types'
+import LanguageSwitcher from './LanguageSwitcher'
 
 function linkClass(href: string, pathname: string) {
   const active = pathname === href || pathname.startsWith(href + '/')
@@ -16,15 +18,10 @@ function linkClass(href: string, pathname: string) {
   }`
 }
 
-const links = [
-  { href: '/', label: 'Dashboard' },
-  { href: '/milestones', label: 'Milestones' },
-  { href: '/timeline', label: 'Timeline' },
-]
-
 export default function AppNav() {
   const pathname = usePathname()
   const router = useRouter()
+  const t = useTranslations('nav')
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
@@ -47,39 +44,42 @@ export default function AppNav() {
 
   const role = user ? getUserRole(user) : null
 
+  const links = [
+    { href: '/', label: t('dashboard') },
+    { href: '/milestones', label: t('milestones') },
+    { href: '/timeline', label: t('timeline') },
+  ]
+
   return (
     <nav className="flex items-center gap-1 px-6 py-3 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
       <span className="mr-4 font-semibold text-sm text-zinc-800 dark:text-zinc-100 shrink-0">
-        PhD Thesis Manager
+        {t('appName')}
       </span>
 
       {links.map(({ href, label }) => (
-        <Link
-          key={href}
-          href={href}
-          className={linkClass(href, pathname)}
-        >
+        <Link key={href} href={href} className={linkClass(href, pathname)}>
           {label}
         </Link>
       ))}
 
       {role === 'admin' && (
         <Link href="/admin/programs" className={linkClass('/admin/programs', pathname)}>
-          Programs
+          {t('programs')}
         </Link>
       )}
       {role === 'admin' && (
         <Link href="/admin/users" className={linkClass('/admin/users', pathname)}>
-          Users
+          {t('users')}
         </Link>
       )}
       {role === 'advisor' && (
         <Link href="/advisor/students" className={linkClass('/advisor/students', pathname)}>
-          Students
+          {t('students')}
         </Link>
       )}
 
       <div className="ml-auto flex items-center gap-3">
+        <LanguageSwitcher />
         {user ? (
           <>
             <div className="text-right hidden sm:block">
@@ -94,7 +94,7 @@ export default function AppNav() {
               onClick={handleSignOut}
               className="px-3 py-1.5 rounded-md text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
             >
-              Sign out
+              {t('signOut')}
             </button>
           </>
         ) : (
@@ -102,7 +102,7 @@ export default function AppNav() {
             href="/login"
             className="px-3 py-1.5 rounded-md text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200"
           >
-            Sign in
+            {t('signIn')}
           </Link>
         )}
       </div>
