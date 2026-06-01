@@ -10,6 +10,7 @@ export type DbProfile = {
   start_date: string | null
   expected_graduation: string | null
   stage: string
+  locale: string
   created_at: string
 }
 
