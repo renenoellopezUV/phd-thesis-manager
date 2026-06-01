@@ -3,6 +3,7 @@ import { createServerClient } from '@supabase/ssr'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { UserRole } from '@/types'
+import { isValidLocale, parseAcceptLanguage, DEFAULT_LOCALE, type Locale } from '@/lib/locale'
 
 const AUTH_ROUTES = new Set(['/login', '/verify-email', '/auth/confirm', '/api/setup-admin'])
 const ADVISOR_PREFIX = '/advisor'
@@ -115,6 +116,34 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/', request.url))
     }
   }
+
+  // ── Locale detection ─────────────────────────────────────────────────────
+  const rawLocale = request.cookies.get('NEXT_LOCALE')?.value
+  let locale: Locale
+
+  if (isValidLocale(rawLocale)) {
+    locale = rawLocale
+  } else if (user) {
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('locale')
+        .eq('id', user.id)
+        .single()
+      locale = isValidLocale(profile?.locale) ? (profile.locale as Locale) : DEFAULT_LOCALE
+    } catch {
+      locale = DEFAULT_LOCALE
+    }
+  } else {
+    locale = parseAcceptLanguage(request.headers.get('accept-language'))
+  }
+
+  supabaseResponse.cookies.set('NEXT_LOCALE', locale, {
+    path: '/',
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: 'lax',
+  })
+  // ── End locale detection ──────────────────────────────────────────────────
 
   return supabaseResponse
 }
