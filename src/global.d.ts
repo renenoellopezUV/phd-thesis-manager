@@ -1,7 +1,11 @@
 // Type augmentation for next-intl v4.
-// Updated to use full message types in Task 7 when messages/en.json exists.
+// Uses real message types derived from the English translation file.
+import en from '../messages/en.json'
+
+type Messages = typeof en
+
 declare module 'use-intl' {
   interface AppConfig {
-    Messages: Record<string, unknown>
+    Messages: Messages
   }
 }

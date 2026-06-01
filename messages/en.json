@@ -1,0 +1,218 @@
+{
+  "nav": {
+    "appName": "PhD Thesis Manager",
+    "dashboard": "Dashboard",
+    "milestones": "Milestones",
+    "timeline": "Timeline",
+    "programs": "Programs",
+    "users": "Users",
+    "students": "Students",
+    "signOut": "Sign out",
+    "signIn": "Sign in"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "PhD Thesis Manager",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "contactAdmin": "Contact your administrator to create an account.",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required"
+  },
+  "dashboard": {
+    "profileNotSetup": "Your profile isn't set up yet.",
+    "completeProfile": "Complete your profile",
+    "editProfile": "Edit profile",
+    "advisor": "Advisor",
+    "department": "Department",
+    "stage": "Stage",
+    "started": "Started",
+    "expectedGraduation": "Expected Graduation",
+    "totalMilestones": "Total Milestones",
+    "completed": "Completed",
+    "percentDone": "{percent}% done",
+    "overdue": "Overdue",
+    "overdueNone": "None — great work!",
+    "overdueAttention": "Need attention",
+    "monthsToGraduation": "Months to Graduation",
+    "approx": "approx.",
+    "upcomingSection": "Upcoming (next 30 days)",
+    "noUpcoming": "No upcoming deadlines"
+  },
+  "milestones": {
+    "title": "Milestones",
+    "empty": "No milestones assigned yet. Your advisor will set these up.",
+    "upcoming": "Upcoming ({count})",
+    "completed": "Completed ({count})"
+  },
+  "milestoneCard": {
+    "overdue": "Overdue",
+    "due": "Due:",
+    "completedOn": "Completed:",
+    "markComplete": "Mark \"{title}\" as complete",
+    "markIncomplete": "Mark \"{title}\" as incomplete",
+    "deleteLabel": "Delete \"{title}\"",
+    "deleteConfirm": "Delete \"{title}\"?"
+  },
+  "timeline": {
+    "title": "Timeline",
+    "empty": "No milestones to display on the timeline.",
+    "legendCompleted": "Completed",
+    "legendOverdue": "Overdue",
+    "legendUpcoming": "Upcoming",
+    "today": "Today",
+    "statusCompleted": "Completed",
+    "statusOverdue": "Overdue",
+    "statusUpcoming": "Upcoming",
+    "due": "Due:"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "department": "Department",
+    "program": "Program",
+    "startDate": "Start Date",
+    "expectedGraduation": "Expected Graduation",
+    "stage": "Stage",
+    "save": "Save profile",
+    "saving": "Saving…",
+    "saved": "Profile saved."
+  },
+  "adminUsers": {
+    "title": "Users ({count})",
+    "loadError": "Failed to load users: {message}",
+    "colEmail": "Email",
+    "colRole": "Role",
+    "colAdvisor": "Advisor",
+    "colVerified": "Verified",
+    "verified": "Verified",
+    "unverified": "Unverified"
+  },
+  "inviteUser": {
+    "button": "+ Invite User",
+    "email": "Email",
+    "role": "Role",
+    "send": "Send Invite",
+    "sending": "Sending…",
+    "cancel": "Cancel",
+    "emailRequired": "Email is required",
+    "success": "Invite sent!"
+  },
+  "advisorAssigner": {
+    "unassigned": "— unassigned —"
+  },
+  "adminPrograms": {
+    "title": "Programs",
+    "empty": "No programs yet. Create one to get started.",
+    "editArrow": "Edit →"
+  },
+  "createProgram": {
+    "button": "+ New Program",
+    "namePlaceholder": "PhD Program",
+    "descriptionPlaceholder": "Optional",
+    "nameLabel": "Name *",
+    "descriptionLabel": "Description",
+    "submit": "Create",
+    "submitting": "Creating…",
+    "cancel": "Cancel"
+  },
+  "programForm": {
+    "delete": "Delete program",
+    "deleteConfirm": "Delete program \"{name}\"? This will remove all milestone definitions.",
+    "nameLabel": "Name *",
+    "descriptionLabel": "Description",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved."
+  },
+  "milestoneDefinitionList": {
+    "title": "Milestone Definitions ({count})",
+    "remove": "Remove",
+    "removeConfirm": "Remove \"{title}\" from this program?",
+    "titleLabel": "Title *",
+    "titlePlaceholder": "e.g. Qualifying Exam",
+    "typeLabel": "Type",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Optional",
+    "add": "+ Add",
+    "adding": "Adding…"
+  },
+  "advisorStudents": {
+    "title": "My Students",
+    "empty": "No students assigned yet.",
+    "percentComplete": "{pct}% complete"
+  },
+  "studentDetail": {
+    "backToStudents": "← Students",
+    "milestonesCount": "Milestones ({count})"
+  },
+  "assignProgram": {
+    "title": "Assign Program",
+    "programLabel": "Program",
+    "selectPlaceholder": "Select a program…",
+    "dueDatesInstruction": "Set due dates for all milestones:",
+    "selectRequired": "Select a program",
+    "submit": "Assign Program",
+    "submitting": "Assigning…"
+  },
+  "milestoneDateEditor": {
+    "done": "✓ Done",
+    "removeConfirm": "Remove milestone \"{title}\" from this student?"
+  },
+  "setup": {
+    "title": "First-time setup",
+    "subtitle": "No admin account found. Create one to get started.",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "confirmLabel": "Confirm password",
+    "submit": "Create admin account",
+    "submitting": "Creating account…",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "passwordRequired": "Password is required",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordMismatch": "Passwords do not match",
+    "doneTitle": "✅ Admin account created",
+    "doneBody": "You're signed in. To skip this setup check on future deployments, add the following environment variable in Netlify:",
+    "doneWarning": "⚠️ Do this now — until the flag is set, the setup endpoint remains accessible to anyone who can reach this deployment.",
+    "goToAdmin": "Go to Admin Panel →",
+    "signInFailed": "Account created, but automatic sign-in failed. Please log in manually on the login page.",
+    "genericError": "Something went wrong",
+    "serverError": "Server error ({status})",
+    "unexpectedError": "Unexpected error: {message}"
+  },
+  "verifyEmail": {
+    "title": "Check your email",
+    "body": "We sent a verification link to {email}. Click the link to activate your account.",
+    "resent": "Verification email resent.",
+    "resend": "Resend verification email"
+  },
+  "stages": {
+    "coursework": "Coursework",
+    "qualifying": "Qualifying Exams",
+    "proposal": "Proposal Defense",
+    "research": "Research",
+    "writing": "Writing",
+    "defense": "Final Defense",
+    "graduated": "Graduated"
+  },
+  "milestoneTypes": {
+    "exam": "Exam",
+    "defense": "Defense",
+    "chapter": "Chapter",
+    "committee-meeting": "Committee Meeting",
+    "other": "Other"
+  },
+  "roles": {
+    "student": "Student",
+    "advisor": "Advisor",
+    "admin": "Admin"
+  },
+  "health": {
+    "onTrack": "On Track",
+    "atRisk": "At Risk",
+    "offTrack": "Off Track"
+  }
+}

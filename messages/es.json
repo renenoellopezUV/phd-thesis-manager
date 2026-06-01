@@ -1,0 +1,218 @@
+{
+  "nav": {
+    "appName": "PhD Thesis Manager",
+    "dashboard": "Inicio",
+    "milestones": "Hitos",
+    "timeline": "Cronograma",
+    "programs": "Programas",
+    "users": "Usuarios",
+    "students": "Estudiantes",
+    "signOut": "Cerrar sesión",
+    "signIn": "Iniciar sesión"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "subtitle": "PhD Thesis Manager",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Iniciar sesión",
+    "submitting": "Iniciando sesión…",
+    "contactAdmin": "Contacta a tu administrador para crear una cuenta.",
+    "emailRequired": "El correo electrónico es requerido",
+    "passwordRequired": "La contraseña es requerida"
+  },
+  "dashboard": {
+    "profileNotSetup": "Tu perfil aún no está configurado.",
+    "completeProfile": "Completa tu perfil",
+    "editProfile": "Editar perfil",
+    "advisor": "Asesor",
+    "department": "Departamento",
+    "stage": "Etapa",
+    "started": "Inicio",
+    "expectedGraduation": "Graduación esperada",
+    "totalMilestones": "Total de hitos",
+    "completed": "Completados",
+    "percentDone": "{percent}% completado",
+    "overdue": "Vencidos",
+    "overdueNone": "Ninguno — ¡excelente trabajo!",
+    "overdueAttention": "Requieren atención",
+    "monthsToGraduation": "Meses para graduarse",
+    "approx": "aprox.",
+    "upcomingSection": "Próximos (30 días)",
+    "noUpcoming": "Sin fechas límite próximas"
+  },
+  "milestones": {
+    "title": "Hitos",
+    "empty": "Aún no hay hitos asignados. Tu asesor los configurará.",
+    "upcoming": "Pendientes ({count})",
+    "completed": "Completados ({count})"
+  },
+  "milestoneCard": {
+    "overdue": "Vencido",
+    "due": "Fecha límite:",
+    "completedOn": "Completado:",
+    "markComplete": "Marcar \"{title}\" como completo",
+    "markIncomplete": "Marcar \"{title}\" como incompleto",
+    "deleteLabel": "Eliminar \"{title}\"",
+    "deleteConfirm": "¿Eliminar \"{title}\"?"
+  },
+  "timeline": {
+    "title": "Cronograma",
+    "empty": "No hay hitos para mostrar en el cronograma.",
+    "legendCompleted": "Completado",
+    "legendOverdue": "Vencido",
+    "legendUpcoming": "Próximo",
+    "today": "Hoy",
+    "statusCompleted": "Completado",
+    "statusOverdue": "Vencido",
+    "statusUpcoming": "Próximo",
+    "due": "Fecha límite:"
+  },
+  "profile": {
+    "title": "Perfil",
+    "name": "Nombre",
+    "department": "Departamento",
+    "program": "Programa",
+    "startDate": "Fecha de inicio",
+    "expectedGraduation": "Graduación esperada",
+    "stage": "Etapa",
+    "save": "Guardar perfil",
+    "saving": "Guardando…",
+    "saved": "Perfil guardado."
+  },
+  "adminUsers": {
+    "title": "Usuarios ({count})",
+    "loadError": "Error al cargar usuarios: {message}",
+    "colEmail": "Correo",
+    "colRole": "Rol",
+    "colAdvisor": "Asesor",
+    "colVerified": "Verificado",
+    "verified": "Verificado",
+    "unverified": "Sin verificar"
+  },
+  "inviteUser": {
+    "button": "+ Invitar usuario",
+    "email": "Correo electrónico",
+    "role": "Rol",
+    "send": "Enviar invitación",
+    "sending": "Enviando…",
+    "cancel": "Cancelar",
+    "emailRequired": "El correo electrónico es requerido",
+    "success": "¡Invitación enviada!"
+  },
+  "advisorAssigner": {
+    "unassigned": "— sin asignar —"
+  },
+  "adminPrograms": {
+    "title": "Programas",
+    "empty": "Aún no hay programas. Crea uno para comenzar.",
+    "editArrow": "Editar →"
+  },
+  "createProgram": {
+    "button": "+ Nuevo programa",
+    "namePlaceholder": "Programa de doctorado",
+    "descriptionPlaceholder": "Opcional",
+    "nameLabel": "Nombre *",
+    "descriptionLabel": "Descripción",
+    "submit": "Crear",
+    "submitting": "Creando…",
+    "cancel": "Cancelar"
+  },
+  "programForm": {
+    "delete": "Eliminar programa",
+    "deleteConfirm": "¿Eliminar programa \"{name}\"? Esto eliminará todas las definiciones de hitos.",
+    "nameLabel": "Nombre *",
+    "descriptionLabel": "Descripción",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Guardado."
+  },
+  "milestoneDefinitionList": {
+    "title": "Definiciones de hitos ({count})",
+    "remove": "Eliminar",
+    "removeConfirm": "¿Eliminar \"{title}\" de este programa?",
+    "titleLabel": "Título *",
+    "titlePlaceholder": "ej. Examen de calificación",
+    "typeLabel": "Tipo",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Opcional",
+    "add": "+ Agregar",
+    "adding": "Agregando…"
+  },
+  "advisorStudents": {
+    "title": "Mis estudiantes",
+    "empty": "Aún no hay estudiantes asignados.",
+    "percentComplete": "{pct}% completado"
+  },
+  "studentDetail": {
+    "backToStudents": "← Estudiantes",
+    "milestonesCount": "Hitos ({count})"
+  },
+  "assignProgram": {
+    "title": "Asignar programa",
+    "programLabel": "Programa",
+    "selectPlaceholder": "Selecciona un programa…",
+    "dueDatesInstruction": "Establece fechas límite para todos los hitos:",
+    "selectRequired": "Selecciona un programa",
+    "submit": "Asignar programa",
+    "submitting": "Asignando…"
+  },
+  "milestoneDateEditor": {
+    "done": "✓ Listo",
+    "removeConfirm": "¿Eliminar hito \"{title}\" de este estudiante?"
+  },
+  "setup": {
+    "title": "Configuración inicial",
+    "subtitle": "No se encontró cuenta de administrador. Crea una para comenzar.",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "confirmLabel": "Confirmar contraseña",
+    "submit": "Crear cuenta de administrador",
+    "submitting": "Creando cuenta…",
+    "emailRequired": "El correo electrónico es requerido",
+    "emailInvalid": "Dirección de correo inválida",
+    "passwordRequired": "La contraseña es requerida",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "doneTitle": "✅ Cuenta de administrador creada",
+    "doneBody": "Has iniciado sesión. Para omitir esta verificación en futuros despliegues, agrega la siguiente variable de entorno en Netlify:",
+    "doneWarning": "⚠️ Házlo ahora — hasta que la variable esté configurada, el endpoint de configuración es accesible para cualquiera.",
+    "goToAdmin": "Ir al Panel de Administración →",
+    "signInFailed": "Cuenta creada, pero el inicio de sesión automático falló. Por favor inicia sesión manualmente.",
+    "genericError": "Algo salió mal",
+    "serverError": "Error del servidor ({status})",
+    "unexpectedError": "Error inesperado: {message}"
+  },
+  "verifyEmail": {
+    "title": "Revisa tu correo",
+    "body": "Enviamos un enlace de verificación a {email}. Haz clic en el enlace para activar tu cuenta.",
+    "resent": "Correo de verificación reenviado.",
+    "resend": "Reenviar correo de verificación"
+  },
+  "stages": {
+    "coursework": "Cursos",
+    "qualifying": "Exámenes de calificación",
+    "proposal": "Defensa de propuesta",
+    "research": "Investigación",
+    "writing": "Escritura",
+    "defense": "Defensa final",
+    "graduated": "Graduado"
+  },
+  "milestoneTypes": {
+    "exam": "Examen",
+    "defense": "Defensa",
+    "chapter": "Capítulo",
+    "committee-meeting": "Reunión de comité",
+    "other": "Otro"
+  },
+  "roles": {
+    "student": "Estudiante",
+    "advisor": "Asesor",
+    "admin": "Administrador"
+  },
+  "health": {
+    "onTrack": "Al día",
+    "atRisk": "En riesgo",
+    "offTrack": "Atrasado"
+  }
+}
