@@ -1,6 +1,7 @@
 'use client'
 
-import { MILESTONE_TYPE_LABELS, type Milestone } from '@/types'
+import { useTranslations } from 'next-intl'
+import type { Milestone } from '@/types'
 
 const TYPE_COLORS: Record<string, string> = {
   exam: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
@@ -18,11 +19,13 @@ type Props = {
 }
 
 export default function MilestoneCard({ milestone, onToggle, onDelete, canDelete = true }: Props) {
+  const t = useTranslations('milestoneCard')
+  const tTypes = useTranslations('milestoneTypes')
   const due = new Date(milestone.dueDate)
   const isOverdue = !milestone.completed && due < new Date()
 
   const handleDelete = () => {
-    if (confirm(`Delete "${milestone.title}"?`)) {
+    if (confirm(t('deleteConfirm', { title: milestone.title }))) {
       onDelete(milestone.id)
     }
   }
@@ -42,18 +45,18 @@ export default function MilestoneCard({ milestone, onToggle, onDelete, canDelete
         checked={milestone.completed}
         onChange={() => onToggle(milestone.id)}
         className="mt-0.5 h-4 w-4 rounded border-zinc-300 accent-zinc-700 cursor-pointer"
-        aria-label={`Mark "${milestone.title}" as ${milestone.completed ? 'incomplete' : 'complete'}`}
+        aria-label={milestone.completed ? t('markIncomplete', { title: milestone.title }) : t('markComplete', { title: milestone.title })}
       />
       <div className="flex-1 min-w-0">
         <div className="flex flex-wrap items-center gap-2 mb-1">
           <span
             className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${TYPE_COLORS[milestone.type]}`}
           >
-            {MILESTONE_TYPE_LABELS[milestone.type]}
+            {tTypes(milestone.type as Parameters<typeof tTypes>[0])}
           </span>
           {isOverdue && (
             <span className="inline-block px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300">
-              Overdue
+              {t('overdue')}
             </span>
           )}
         </div>
@@ -68,10 +71,10 @@ export default function MilestoneCard({ milestone, onToggle, onDelete, canDelete
           <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{milestone.description}</p>
         )}
         <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">
-          Due: {due.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+          {t('due')} {due.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
           {milestone.completedDate && (
             <span className="ml-2">
-              · Completed:{' '}
+              · {t('completedOn')}{' '}
               {new Date(milestone.completedDate).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
@@ -85,7 +88,7 @@ export default function MilestoneCard({ milestone, onToggle, onDelete, canDelete
         <button
           onClick={handleDelete}
           className="text-zinc-300 dark:text-zinc-600 hover:text-red-500 dark:hover:text-red-400 transition-colors text-xs px-1"
-          aria-label={`Delete "${milestone.title}"`}
+          aria-label={t('deleteLabel', { title: milestone.title })}
         >
           ✕
         </button>
