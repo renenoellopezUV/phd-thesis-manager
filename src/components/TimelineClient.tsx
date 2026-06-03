@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { MILESTONE_TYPE_LABELS, type Milestone } from '@/types'
+import { useTranslations } from 'next-intl'
+import { type Milestone } from '@/types'
 
 type MilestoneGroup = 'completed' | 'overdue' | 'future'
 
@@ -25,6 +26,8 @@ const GROUP_LINE_STYLES: Record<MilestoneGroup, string> = {
 }
 
 export default function TimelineClient({ milestones }: { milestones: Milestone[] }) {
+  const t = useTranslations('timeline')
+  const tTypes = useTranslations('milestoneTypes')
   const today = new Date()
   const todayStr = today.toISOString().slice(0, 10)
   const sorted = [...milestones].sort((a, b) => a.dueDate.localeCompare(b.dueDate))
@@ -37,7 +40,7 @@ export default function TimelineClient({ milestones }: { milestones: Milestone[]
   if (sorted.length === 0) {
     return (
       <div className="flex items-center justify-center py-24 text-sm text-zinc-400 dark:text-zinc-500">
-        No milestones to display on the timeline.
+        {t('empty')}
       </div>
     )
   }
@@ -47,15 +50,15 @@ export default function TimelineClient({ milestones }: { milestones: Milestone[]
       <div className="flex flex-wrap gap-4 text-xs text-zinc-500 dark:text-zinc-400">
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-full bg-zinc-300 dark:bg-zinc-600 border border-zinc-400" />
-          Completed
+          {t('legendCompleted')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-full bg-red-400 dark:bg-red-600 border border-red-500" />
-          Overdue
+          {t('legendOverdue')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-full bg-white dark:bg-zinc-900 border border-zinc-400 dark:border-zinc-500" />
-          Upcoming
+          {t('legendUpcoming')}
         </span>
       </div>
 
@@ -71,7 +74,7 @@ export default function TimelineClient({ milestones }: { milestones: Milestone[]
                 {isToday && (
                   <div className="flex flex-col items-center mx-2">
                     <div className="w-0.5 h-8 bg-blue-400 dark:bg-blue-500" />
-                    <span className="text-xs text-blue-500 dark:text-blue-400 font-medium whitespace-nowrap px-1">Today</span>
+                    <span className="text-xs text-blue-500 dark:text-blue-400 font-medium whitespace-nowrap px-1">{t('today')}</span>
                     <div className="w-0.5 h-4 bg-blue-400 dark:bg-blue-500" />
                   </div>
                 )}
@@ -84,7 +87,7 @@ export default function TimelineClient({ milestones }: { milestones: Milestone[]
                       onMouseLeave={() => setHoveredId(null)}
                       onFocus={() => setFocusedId(milestone.id)}
                       onBlur={() => setFocusedId(null)}
-                      aria-label={`${milestone.title} — ${MILESTONE_TYPE_LABELS[milestone.type]} — due ${new Date(milestone.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} — ${milestone.completed ? 'Completed' : group === 'overdue' ? 'Overdue' : 'Upcoming'}`}
+                      aria-label={`${milestone.title} — ${tTypes(milestone.type as Parameters<typeof tTypes>[0])} — due ${new Date(milestone.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} — ${milestone.completed ? t('statusCompleted') : group === 'overdue' ? t('statusOverdue') : t('statusUpcoming')}`}
                       aria-expanded={isActive}
                     />
                     {i < sorted.length - 1 && (
@@ -94,12 +97,12 @@ export default function TimelineClient({ milestones }: { milestones: Milestone[]
                   {isActive && (
                     <div className="absolute z-10 mt-2 w-52 p-3 rounded-lg shadow-lg border text-left bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-xs space-y-1" role="tooltip">
                       <p className="font-semibold text-zinc-800 dark:text-zinc-100 text-sm leading-snug">{milestone.title}</p>
-                      <p className="text-zinc-500 dark:text-zinc-400">{MILESTONE_TYPE_LABELS[milestone.type]}</p>
+                      <p className="text-zinc-500 dark:text-zinc-400">{tTypes(milestone.type as Parameters<typeof tTypes>[0])}</p>
                       <p className="text-zinc-500 dark:text-zinc-400">
-                        Due: {new Date(milestone.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                        {t('due')} {new Date(milestone.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                       </p>
                       <p className={group === 'overdue' ? 'text-red-500' : group === 'completed' ? 'text-zinc-400' : 'text-zinc-500'}>
-                        {milestone.completed ? 'Completed' : group === 'overdue' ? 'Overdue' : 'Upcoming'}
+                        {milestone.completed ? t('statusCompleted') : group === 'overdue' ? t('statusOverdue') : t('statusUpcoming')}
                       </p>
                     </div>
                   )}
@@ -118,7 +121,7 @@ export default function TimelineClient({ milestones }: { milestones: Milestone[]
           {todayIndex === -1 && (
             <div className="flex flex-col items-center ml-2">
               <div className="w-0.5 h-8 bg-blue-400 dark:bg-blue-500" />
-              <span className="text-xs text-blue-500 dark:text-blue-400 font-medium whitespace-nowrap px-1">Today</span>
+              <span className="text-xs text-blue-500 dark:text-blue-400 font-medium whitespace-nowrap px-1">{t('today')}</span>
             </div>
           )}
         </div>
