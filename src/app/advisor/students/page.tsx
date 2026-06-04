@@ -1,10 +1,12 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { dbMilestoneToMilestone, dbProfileStage } from '@/types/database'
-import { STAGE_LABELS } from '@/types'
 import HealthBadge from '@/components/HealthBadge'
 
 export default async function AdvisorStudentsPage() {
+  const t = await getTranslations('advisorStudents')
+  const tStages = await getTranslations('stages')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -17,9 +19,9 @@ export default async function AdvisorStudentsPage() {
   if (!students || students.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="text-lg font-semibold">My Students</h1>
+        <h1 className="text-lg font-semibold">{t('title')}</h1>
         <p className="text-sm text-zinc-400 dark:text-zinc-500 py-12 text-center">
-          No students assigned yet.
+          {t('empty')}
         </p>
       </div>
     )
@@ -41,7 +43,7 @@ export default async function AdvisorStudentsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-lg font-semibold">My Students</h1>
+      <h1 className="text-lg font-semibold">{t('title')}</h1>
       <div className="space-y-3">
         {students.map((student) => {
           const milestones = milestonesByStudent.get(student.id) ?? []
@@ -60,11 +62,11 @@ export default async function AdvisorStudentsPage() {
               <div>
                 <p className="font-medium">{student.name || student.email}</p>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  {student.program ?? '—'} · {STAGE_LABELS[stage]}
+                  {student.program ?? '—'} · {tStages(stage as any)}
                 </p>
               </div>
               <div className="flex items-center gap-3 text-sm shrink-0">
-                <span className="text-zinc-500 dark:text-zinc-400">{pct}% complete</span>
+                <span className="text-zinc-500 dark:text-zinc-400">{t('percentComplete', { pct })}</span>
                 <HealthBadge overdueCount={overdue} />
               </div>
             </Link>

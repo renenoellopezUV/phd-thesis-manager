@@ -2,8 +2,9 @@
 
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { updateMilestoneDueDate, deleteMilestone } from '@/app/actions/milestones'
-import { MILESTONE_TYPE_LABELS, type Milestone, type MilestoneType } from '@/types'
+import { type Milestone, type MilestoneType } from '@/types'
 
 export default function MilestoneDateEditor({
   milestones,
@@ -12,6 +13,8 @@ export default function MilestoneDateEditor({
   milestones: Milestone[]
   studentId: string
 }) {
+  const t = useTranslations('milestoneDateEditor')
+  const tTypes = useTranslations('milestoneTypes')
   const router = useRouter()
   const [pending, startTransition] = useTransition()
 
@@ -23,7 +26,7 @@ export default function MilestoneDateEditor({
   }
 
   function handleDelete(id: string, title: string) {
-    if (!confirm(`Remove milestone "${title}" from this student?`)) return
+    if (!confirm(t('removeConfirm', { title }))) return
     startTransition(async () => {
       await deleteMilestone(id, studentId)
       router.refresh()
@@ -35,10 +38,10 @@ export default function MilestoneDateEditor({
       {milestones.map((m) => (
         <div key={m.id} className="flex items-center gap-3 p-3 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
           <span className="text-xs px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-            {MILESTONE_TYPE_LABELS[m.type as MilestoneType] ?? m.type}
+            {tTypes(m.type as MilestoneType)}
           </span>
           <span className="text-sm font-medium flex-1">{m.title}</span>
-          {m.completed && <span className="text-xs text-green-600 dark:text-green-400">✓ Done</span>}
+          {m.completed && <span className="text-xs text-green-600 dark:text-green-400">{t('done')}</span>}
           <input
             type="date"
             defaultValue={m.dueDate}

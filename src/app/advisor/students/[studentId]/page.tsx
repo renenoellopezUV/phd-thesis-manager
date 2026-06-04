@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { dbMilestoneToMilestone } from '@/types/database'
 import AssignProgramForm from './AssignProgramForm'
@@ -12,6 +13,7 @@ export default async function StudentDetailPage({
   params: Promise<{ studentId: string }>
 }) {
   const { studentId } = await params
+  const t = await getTranslations('studentDetail')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -55,7 +57,7 @@ export default async function StudentDetailPage({
     <div className="space-y-6 max-w-2xl">
       <div className="flex items-center gap-3">
         <Link href="/advisor/students" className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300">
-          ← Students
+          {t('backToStudents')}
         </Link>
         <h1 className="text-lg font-semibold">{student.name || student.email}</h1>
       </div>
@@ -70,7 +72,7 @@ export default async function StudentDetailPage({
       ) : (
         <div className="space-y-4">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-            Milestones ({milestones.length})
+            {t('milestonesCount', { count: milestones.length })}
           </h2>
           <MilestoneDateEditor milestones={milestones} studentId={studentId} />
         </div>
