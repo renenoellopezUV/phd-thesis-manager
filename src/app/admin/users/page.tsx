@@ -3,6 +3,8 @@ import type { UserRole } from '@/types'
 import RoleSelector from './RoleSelector'
 import InviteUserForm from './InviteUserForm'
 import AdvisorAssigner from './AdvisorAssigner'
+import VerifyButton from './VerifyButton'
+import PasswordEditor from './PasswordEditor'
 import { getTranslations } from 'next-intl/server'
 
 export default async function AdminUsersPage() {
@@ -44,7 +46,8 @@ export default async function AdminUsersPage() {
               <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colEmail')}</th>
               <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colRole')}</th>
               <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colAdvisor')}</th>
-              <th className="text-left py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colVerified')}</th>
+              <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colVerified')}</th>
+              <th className="text-left py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colPassword')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -69,12 +72,11 @@ export default async function AdminUsersPage() {
                       <span className="text-zinc-300 dark:text-zinc-600 text-xs">—</span>
                     )}
                   </td>
+                  <td className="py-3 pr-4">
+                    <VerifyButton userId={u.id} verified={verified} />
+                  </td>
                   <td className="py-3">
-                    {verified ? (
-                      <span className="text-green-600 dark:text-green-400 text-xs font-medium">{t('verified')}</span>
-                    ) : (
-                      <span className="text-amber-500 dark:text-amber-400 text-xs font-medium">{t('unverified')}</span>
-                    )}
+                    <PasswordEditor userId={u.id} />
                   </td>
                 </tr>
               )
