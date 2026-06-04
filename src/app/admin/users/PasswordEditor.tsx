@@ -59,6 +59,7 @@ export default function PasswordEditor({ userId }: { userId: string }) {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          aria-label={t('newPassword')}
           placeholder={t('newPassword')}
           className="px-2 py-1 text-xs rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 w-32 focus:outline-none focus:ring-1 focus:ring-zinc-400"
         />
