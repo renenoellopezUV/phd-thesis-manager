@@ -65,7 +65,6 @@ export async function verifyUserEmail(
   userId: string,
 ): Promise<{ error?: string }> {
   const admin = createAdminClient()
-  // @ts-expect-error — email_confirm is valid per Supabase Admin API
   const { error } = await admin.auth.admin.updateUserById(userId, {
     email_confirm: true,
   })
