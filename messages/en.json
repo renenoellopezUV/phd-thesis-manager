@@ -88,7 +88,15 @@
     "colAdvisor": "Advisor",
     "colVerified": "Verified",
     "verified": "Verified",
-    "unverified": "Unverified"
+    "unverified": "Unverified",
+    "colPassword": "Password",
+    "passwordChange": "Change password",
+    "newPassword": "New password",
+    "passwordSave": "Save",
+    "passwordSaving": "Saving…",
+    "passwordCancel": "Cancel",
+    "passwordTooShort": "At least 8 characters",
+    "verifying": "Verifying…"
   },
   "inviteUser": {
     "button": "+ Invite User",
