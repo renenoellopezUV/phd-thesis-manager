@@ -3,9 +3,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 
 export default function SetupPage() {
+  const t = useTranslations('setup')
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -20,11 +23,11 @@ export default function SetupPage() {
 
   function validate(): boolean {
     const next: typeof errors = {}
-    if (!email.trim()) next.email = 'Email is required'
-    else if (!email.includes('@')) next.email = 'Invalid email address'
-    if (!password) next.password = 'Password is required'
-    else if (password.length < 8) next.password = 'Password must be at least 8 characters'
-    if (password !== confirm) next.confirm = 'Passwords do not match'
+    if (!email.trim()) next.email = t('emailRequired')
+    else if (!email.includes('@')) next.email = t('emailInvalid')
+    if (!password) next.password = t('passwordRequired')
+    else if (password.length < 8) next.password = t('passwordTooShort')
+    if (password !== confirm) next.confirm = t('passwordMismatch')
     setErrors(next)
     return Object.keys(next).length === 0
   }
@@ -44,12 +47,12 @@ export default function SetupPage() {
       })
 
       if (!res.ok) {
-        let message = 'Something went wrong'
+        let message = t('genericError')
         try {
           const body = await res.json() as { error?: string }
-          message = body.error ?? `Server error (${res.status})`
+          message = body.error ?? t('serverError', { status: res.status })
         } catch {
-          message = `Server error (${res.status})`
+          message = t('serverError', { status: res.status })
         }
         setServerError(message)
         return
@@ -61,15 +64,13 @@ export default function SetupPage() {
 
       if (signInError) {
         // Account created but sign-in failed — user can log in manually
-        setServerError(
-          'Account created, but automatic sign-in failed. Please log in manually on the login page.'
-        )
+        setServerError(t('signInFailed'))
         return
       }
 
       setDone(true)
     } catch (err) {
-      setServerError(`Unexpected error: ${err instanceof Error ? err.message : String(err)}`)
+      setServerError(t('unexpectedError', { message: err instanceof Error ? err.message : String(err) }))
     } finally {
       setLoading(false)
     }
@@ -81,24 +82,23 @@ export default function SetupPage() {
         <div className="w-full max-w-sm space-y-4">
           <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-6 space-y-3">
             <h2 className="font-semibold text-emerald-800 dark:text-emerald-300">
-              ✅ Admin account created
+              {t('doneTitle')}
             </h2>
             <p className="text-sm text-emerald-700 dark:text-emerald-400">
-              You&rsquo;re signed in. To skip this setup check on future deployments, add the
-              following environment variable in Netlify:
+              {t('doneBody')}
             </p>
             <code className="block text-xs bg-emerald-100 dark:bg-emerald-900/40 rounded-md px-3 py-2 font-mono text-emerald-900 dark:text-emerald-200 select-all">
               ADMIN_BOOTSTRAPPED=true
             </code>
             <p className="text-xs text-emerald-600 dark:text-emerald-500">
-              ⚠️ Do this now — until the flag is set, the setup endpoint remains accessible to anyone who can reach this deployment.
+              {t('doneWarning')}
             </p>
           </div>
           <Link
             href="/admin/users"
             className="block w-full text-center py-2 px-4 rounded-md bg-zinc-800 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-medium hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
           >
-            Go to Admin Panel →
+            {t('goToAdmin')}
           </Link>
         </div>
       </div>
@@ -110,10 +110,10 @@ export default function SetupPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
-            First-time setup
+            {t('title')}
           </h1>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            No admin account found. Create one to get started.
+            {t('subtitle')}
           </p>
         </div>
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6">
@@ -123,7 +123,7 @@ export default function SetupPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1"
               >
-                Email
+                {t('emailLabel')}
               </label>
               <input
                 id="email"
@@ -143,7 +143,7 @@ export default function SetupPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1"
               >
-                Password
+                {t('passwordLabel')}
               </label>
               <input
                 id="password"
@@ -163,7 +163,7 @@ export default function SetupPage() {
                 htmlFor="confirm"
                 className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1"
               >
-                Confirm password
+                {t('confirmLabel')}
               </label>
               <input
                 id="confirm"
@@ -189,7 +189,7 @@ export default function SetupPage() {
               disabled={loading}
               className="w-full py-2 px-4 rounded-md bg-zinc-800 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-medium hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating account…' : 'Create admin account'}
+              {loading ? t('submitting') : t('submit')}
             </button>
           </form>
         </div>
