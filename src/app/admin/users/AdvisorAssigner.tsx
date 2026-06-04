@@ -2,6 +2,7 @@
 
 import { useTransition } from 'react'
 import { assignAdvisor } from '@/app/actions/admin'
+import { useTranslations } from 'next-intl'
 
 type Advisor = { id: string; email: string }
 
@@ -14,6 +15,7 @@ export default function AdvisorAssigner({
   currentAdvisorId: string | null
   advisors: Advisor[]
 }) {
+  const t = useTranslations('advisorAssigner')
   const [pending, startTransition] = useTransition()
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -30,7 +32,7 @@ export default function AdvisorAssigner({
       disabled={pending}
       className="px-2 py-1 text-xs rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 disabled:opacity-50"
     >
-      <option value="">— unassigned —</option>
+      <option value="">{t('unassigned')}</option>
       {advisors.map((a) => (
         <option key={a.id} value={a.id}>{a.email}</option>
       ))}

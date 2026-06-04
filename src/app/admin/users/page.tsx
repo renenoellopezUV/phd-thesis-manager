@@ -1,18 +1,20 @@
 import { createAdminClient } from '@/lib/supabase/admin'
-import { ROLE_LABELS, type UserRole } from '@/types'
+import type { UserRole } from '@/types'
 import RoleSelector from './RoleSelector'
 import InviteUserForm from './InviteUserForm'
 import AdvisorAssigner from './AdvisorAssigner'
+import { getTranslations } from 'next-intl/server'
 
 export default async function AdminUsersPage() {
+  const t = await getTranslations('adminUsers')
   const admin = createAdminClient()
   const { data, error } = await admin.auth.admin.listUsers({ perPage: 200 })
 
   if (error) {
     return (
       <div className="space-y-4">
-        <h1 className="text-lg font-semibold">Users</h1>
-        <p className="text-sm text-red-500">Failed to load users: {error.message}</p>
+        <h1 className="text-lg font-semibold">{t('title', { count: 0 })}</h1>
+        <p className="text-sm text-red-500">{t('loadError', { message: error.message })}</p>
       </div>
     )
   }
@@ -32,17 +34,17 @@ export default async function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Users ({users.length})</h1>
+        <h1 className="text-lg font-semibold">{t('title', { count: users.length })}</h1>
         <InviteUserForm />
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b border-zinc-200 dark:border-zinc-800">
-              <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Email</th>
-              <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Role</th>
-              <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Advisor</th>
-              <th className="text-left py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Verified</th>
+              <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colEmail')}</th>
+              <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colRole')}</th>
+              <th className="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colAdvisor')}</th>
+              <th className="text-left py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t('colVerified')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -69,9 +71,9 @@ export default async function AdminUsersPage() {
                   </td>
                   <td className="py-3">
                     {verified ? (
-                      <span className="text-green-600 dark:text-green-400 text-xs font-medium">Verified</span>
+                      <span className="text-green-600 dark:text-green-400 text-xs font-medium">{t('verified')}</span>
                     ) : (
-                      <span className="text-amber-500 dark:text-amber-400 text-xs font-medium">Unverified</span>
+                      <span className="text-amber-500 dark:text-amber-400 text-xs font-medium">{t('unverified')}</span>
                     )}
                   </td>
                 </tr>
@@ -80,9 +82,7 @@ export default async function AdminUsersPage() {
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-zinc-400 dark:text-zinc-500">
-        Role labels: {Object.entries(ROLE_LABELS).map(([k, v]) => `${k} = ${v}`).join(', ')}
-      </p>
+
     </div>
   )
 }
