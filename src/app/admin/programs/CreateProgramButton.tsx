@@ -2,10 +2,12 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { createProgram } from '@/app/actions/programs'
 
 export default function CreateProgramButton() {
   const router = useRouter()
+  const t = useTranslations('createProgram')
   const [open, setOpen] = useState(false)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -31,7 +33,7 @@ export default function CreateProgramButton() {
         onClick={() => setOpen(true)}
         className="px-3 py-1.5 rounded-md bg-zinc-800 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-medium hover:bg-zinc-700 transition-colors"
       >
-        + New Program
+        {t('button')}
       </button>
     )
   }
@@ -39,27 +41,27 @@ export default function CreateProgramButton() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-3 p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
       <div>
-        <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Name *</label>
+        <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t('nameLabel')}</label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="PhD Program"
+          placeholder={t('namePlaceholder')}
           className="px-3 py-2 text-sm rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-zinc-400 w-56"
         />
       </div>
       <div>
-        <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Description</label>
+        <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t('descriptionLabel')}</label>
         <input
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Optional"
+          placeholder={t('descriptionPlaceholder')}
           className="px-3 py-2 text-sm rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-zinc-400 w-48"
         />
       </div>
       <button type="submit" disabled={pending} className="px-3 py-2 rounded-md bg-zinc-800 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-medium disabled:opacity-50">
-        {pending ? 'Creating…' : 'Create'}
+        {pending ? t('submitting') : t('submit')}
       </button>
-      <button type="button" onClick={() => setOpen(false)} className="text-xs text-zinc-400 hover:text-zinc-600">Cancel</button>
+      <button type="button" onClick={() => setOpen(false)} className="text-xs text-zinc-400 hover:text-zinc-600">{t('cancel')}</button>
       {error && <p className="w-full text-xs text-red-500">{error}</p>}
     </form>
   )

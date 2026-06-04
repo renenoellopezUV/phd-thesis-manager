@@ -1,9 +1,11 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import CreateProgramButton from './CreateProgramButton'
 
 export default async function ProgramsPage() {
   const supabase = await createClient()
+  const t = await getTranslations('adminPrograms')
   const { data: programs } = await supabase
     .from('programs')
     .select('*')
@@ -12,13 +14,13 @@ export default async function ProgramsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Programs</h1>
+        <h1 className="text-lg font-semibold">{t('title')}</h1>
         <CreateProgramButton />
       </div>
 
       {!programs || programs.length === 0 ? (
         <p className="text-sm text-zinc-400 dark:text-zinc-500 py-12 text-center">
-          No programs yet. Create one to get started.
+          {t('empty')}
         </p>
       ) : (
         <div className="space-y-2">
@@ -34,7 +36,7 @@ export default async function ProgramsPage() {
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{p.description}</p>
                 )}
               </div>
-              <span className="text-xs text-zinc-400 dark:text-zinc-500">Edit →</span>
+              <span className="text-xs text-zinc-400 dark:text-zinc-500">{t('editArrow')}</span>
             </Link>
           ))}
         </div>
