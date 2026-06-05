@@ -73,6 +73,7 @@
     "name": "Nombre",
     "department": "Departamento",
     "program": "Programa",
+    "programNone": "— ninguno —",
     "startDate": "Fecha de inicio",
     "expectedGraduation": "Graduación esperada",
     "stage": "Etapa",
