@@ -6,7 +6,7 @@ export type DbProfile = {
   email: string
   advisor_id: string | null      // replaces advisor_email
   department: string | null
-  program: string | null
+  program_id: string | null
   start_date: string | null
   expected_graduation: string | null
   stage: string
