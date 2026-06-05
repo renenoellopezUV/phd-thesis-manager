@@ -8,18 +8,25 @@ export async function updateProfile(formData: FormData): Promise<{ error?: strin
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Unauthorized' }
 
+  const role = (user.app_metadata as { role?: string } | undefined)?.role ?? 'student'
+
+  const base = {
+    id: user.id,
+    email: user.email ?? '',
+    name: (formData.get('name') as string | null)?.trim() ?? '',
+    department: (formData.get('department') as string | null)?.trim() || null,
+    program_id: (formData.get('program_id') as string | null) || null,
+  }
+
+  const studentFields = role === 'student' ? {
+    start_date: (formData.get('startDate') as string | null) || null,
+    expected_graduation: (formData.get('expectedGraduation') as string | null) || null,
+    stage: (formData.get('stage') as string | null) ?? 'coursework',
+  } : {}
+
   const { error } = await supabase
     .from('profiles')
-    .upsert({
-      id: user.id,
-      email: user.email ?? '',
-      name: (formData.get('name') as string | null)?.trim() ?? '',
-      department: (formData.get('department') as string | null)?.trim() || null,
-      program: (formData.get('program') as string | null)?.trim() || null,
-      start_date: (formData.get('startDate') as string | null) || null,
-      expected_graduation: (formData.get('expectedGraduation') as string | null) || null,
-      stage: (formData.get('stage') as string | null) ?? 'coursework',
-    })
+    .upsert({ ...base, ...studentFields })
 
   if (error) return { error: error.message }
 
