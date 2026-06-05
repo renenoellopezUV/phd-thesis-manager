@@ -109,7 +109,8 @@
     "success": "¡Invitación enviada!"
   },
   "advisorAssigner": {
-    "unassigned": "— sin asignar —"
+    "unassigned": "— sin asignar —",
+    "noProgram": "Sin programa asignado"
   },
   "adminPrograms": {
     "title": "Programas",

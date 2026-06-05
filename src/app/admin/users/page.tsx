@@ -25,13 +25,19 @@ export default async function AdminUsersPage() {
 
   const { data: profiles } = await admin
     .from('profiles')
-    .select('id, advisor_id')
+    .select('id, advisor_id, program_id')
 
-  const profileMap = new Map((profiles ?? []).map((p: { id: string; advisor_id: string | null }) => [p.id, p]))
+  const profileMap = new Map(
+    (profiles ?? []).map((p: { id: string; advisor_id: string | null; program_id: string | null }) => [p.id, p])
+  )
 
-  const advisors = users
+  const allAdvisors = users
     .filter((u) => (u.app_metadata as { role?: string })?.role === 'advisor')
-    .map((u) => ({ id: u.id, email: u.email ?? '' }))
+    .map((u) => ({
+      id: u.id,
+      email: u.email ?? '',
+      programId: profileMap.get(u.id)?.program_id ?? null,
+    }))
 
   return (
     <div className="space-y-6">
@@ -54,6 +60,10 @@ export default async function AdminUsersPage() {
             {users.map((u) => {
               const role = ((u.app_metadata as { role?: UserRole } | undefined)?.role) ?? 'student'
               const verified = !!u.email_confirmed_at
+              const studentProgramId = profileMap.get(u.id)?.program_id ?? null
+              const eligibleAdvisors = studentProgramId
+                ? allAdvisors.filter((a) => a.programId === studentProgramId)
+                : []
 
               return (
                 <tr key={u.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
@@ -66,7 +76,8 @@ export default async function AdminUsersPage() {
                       <AdvisorAssigner
                         studentId={u.id}
                         currentAdvisorId={profileMap.get(u.id)?.advisor_id ?? null}
-                        advisors={advisors}
+                        advisors={eligibleAdvisors}
+                        disabled={!studentProgramId}
                       />
                     ) : (
                       <span className="text-zinc-300 dark:text-zinc-600 text-xs">—</span>
@@ -84,7 +95,6 @@ export default async function AdminUsersPage() {
           </tbody>
         </table>
       </div>
-
     </div>
   )
 }
