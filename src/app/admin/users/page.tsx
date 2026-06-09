@@ -31,6 +31,14 @@ export default async function AdminUsersPage() {
     (profiles ?? []).map((p: { id: string; advisor_id: string | null; program_id: string | null }) => [p.id, p])
   )
 
+  const { data: programs } = await admin
+    .from('programs')
+    .select('id, name')
+
+  const programMap = new Map(
+    (programs ?? []).map((p: { id: string; name: string }) => [p.id, p.name])
+  )
+
   const allAdvisors = users
     .filter((u) => (u.app_metadata as { role?: string })?.role === 'advisor')
     .map((u) => ({
@@ -79,6 +87,14 @@ export default async function AdminUsersPage() {
                         advisors={eligibleAdvisors}
                         disabled={!studentProgramId}
                       />
+                    ) : role === 'advisor' ? (
+                      (() => {
+                        const advisorProgramId = profileMap.get(u.id)?.program_id ?? null
+                        const advisorProgramName = advisorProgramId ? programMap.get(advisorProgramId) : null
+                        return advisorProgramName
+                          ? <span className="text-xs text-zinc-700 dark:text-zinc-300">{advisorProgramName}</span>
+                          : <span className="text-zinc-300 dark:text-zinc-600 text-xs">—</span>
+                      })()
                     ) : (
                       <span className="text-zinc-300 dark:text-zinc-600 text-xs">—</span>
                     )}
